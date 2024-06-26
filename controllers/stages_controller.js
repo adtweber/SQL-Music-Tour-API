@@ -1,28 +1,27 @@
 // DEPENDENCIES
 const stages = require('express').Router()
 const db = require('../models')
-const { Stage } = db
+const { Stage } = db 
 const { Op } = require('sequelize')
 
-// FIND ALL BANDS
+// FIND ALL STAGES
 stages.get('/', async (req, res) => {
     try {
         const foundStages = await Stage.findAll({
-            order: [ [ 'available_start_time', 'ASC' ] ],
             where: {
-                name: { [Op.like]: `%${req.query.name ? req.query.name : ''}%` }
+                stage_name: { [Op.like]: `%${req.query.stage_name ? req.query.stage_name : ''}%` }
             }
         })
-        res.status(200).json(foundStage)
+        res.status(200).json(foundStages)
     } catch (error) {
         res.status(500).json(error)
     }
 })
 
-// FIND A SPECIFIC BAND
+// FIND A SPECIFIC STAGE
 stages.get('/:id', async (req, res) => {
     try {
-        const foundEvent = await Stage.findOne({
+        const foundStage = await Stage.findOne({
             where: { stage_id: req.params.id }
         })
         res.status(200).json(foundStage)
@@ -31,7 +30,7 @@ stages.get('/:id', async (req, res) => {
     }
 })
 
-// CREATE A BAND
+// CREATE A STAGE
 stages.post('/', async (req, res) => {
     try {
         const newStage = await Stage.create(req.body)
@@ -39,12 +38,12 @@ stages.post('/', async (req, res) => {
             message: 'Successfully inserted a new stage',
             data: newStage
         })
-    } catch (err) {
+    } catch(err) {
         res.status(500).json(err)
     }
 })
 
-// UPDATE A BAND
+// UPDATE A STAGE
 stages.put('/:id', async (req, res) => {
     try {
         const updatedStages = await Stage.update(req.body, {
@@ -55,12 +54,12 @@ stages.put('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully updated ${updatedStages} stage(s)`
         })
-    } catch (err) {
+    } catch(err) {
         res.status(500).json(err)
     }
 })
 
-// DELETE A BAND
+// DELETE A STAGE
 stages.delete('/:id', async (req, res) => {
     try {
         const deletedStages = await Stage.destroy({
@@ -71,7 +70,7 @@ stages.delete('/:id', async (req, res) => {
         res.status(200).json({
             message: `Successfully deleted ${deletedStages} stage(s)`
         })
-    } catch (err) {
+    } catch(err) {
         res.status(500).json(err)
     }
 })
